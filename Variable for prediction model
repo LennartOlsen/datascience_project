@@ -1,0 +1,11 @@
+Current variables for the prediction model:
+1. Current form (Last 5/10 matches)
+2. Current rank in league
+3. Scoring deficit/surplus per match
+
+Variable Ideas for the prediction model:
+
+1. the mean for the leagues w/l/d per season
+2. the mean for the goals scored in a league 
+3. Normalize and standardize goals scored, to remove outliers and to use goal deficit as a variable
+4. Including the odds set by the different betting companies.
