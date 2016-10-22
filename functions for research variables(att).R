@@ -1,0 +1,79 @@
+#create a league rank function. 
+#League_id is an int 
+#seasonID is characters - E.g. "2008/2009" 
+#teamName is characters - E.g. "Basel"
+team_rank_in_league <- function(seasonID, leagueID, teamName){
+  # retrieves all data from a specific season
+  season_data <- data[data$season == seasonID & data$league_id == leagueID,]
+  
+  teams = c(season_data$home_team_name[!duplicated((season_data$home_team_name))])
+  num_of_teams = length(teams)
+  
+  # Creates data frame
+  league_score <- data.frame(teams, p= integer(num_of_teams),
+                             g_for= integer(num_of_teams), g_against= integer(num_of_teams),
+                             deficits= integer(num_of_teams))
+  
+  # inserts all teams into the league score table, with their season points, goals for/against and deficit
+  for(team in teams){
+    team_data_away <- as.data.frame(season_data[season_data$away_team_name == team,])
+    team_data_home <- as.data.frame(season_data[season_data$home_team_name == team,])
+    
+    points <- get_season_points(team_data_home$w_l_d_home,team_data_away$w_l_d_away)
+    deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
+                                  team_data_away$home_team_goal,team_data_away$away_team_goal)
+    goals_for <- sum(team_data_home$home_team_goal) + sum(team_data_away$away_team_goal)
+    goals_against <- sum(team_data_home$away_team_goal) + sum(team_data_away$home_team_goal)
+    
+    league_score[league_score$teams == team,] <- c(team, points,goals_for, goals_against, deficit)
+  }
+  
+  # Order teams according to the football rules, points - deficit and so on.
+  attach(league_score)
+  league_score <- league_score[order(p, deficits, g_for, g_against, decreasing = TRUE),]
+  detach(league_score)
+  
+  return(which(league_score$teams == teamName))
+}
+
+#create a league rank function at specific moment of a season. 
+#League_id is an int 
+#search_date is characters - E.g. "2008-08-23"
+#seasonID is characters - E.g. "2008/2009" 
+#teamName is characters - E.g. "Basel"
+team_rank_specific_date <- function(seasonID, search_date, leagueID, teamName){
+  # retrieves all data from a specific season and a current time of the season
+  season_data <- data[data$season == seasonID & data$league_id == leagueID,]
+  season_data <- season_data[date]
+  
+  teams = c(season_data$home_team_name[!duplicated((season_data$home_team_name))])
+  num_of_teams = length(teams)
+  
+  # Creates data frame
+  league_score <- data.frame(teams, p= integer(num_of_teams),
+                             g_for= integer(num_of_teams), g_against= integer(num_of_teams),
+                             deficits= integer(num_of_teams))
+  
+  # inserts all teams into the league score table, with their season points, goals for/against and deficit
+  for(team in teams){
+    team_data_away <- as.data.frame(season_data[season_data$away_team_name == team,])
+    team_data_home <- as.data.frame(season_data[season_data$home_team_name == team,])
+    
+    points <- get_season_points(team_data_home$w_l_d_home,team_data_away$w_l_d_away)
+    deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
+                                  team_data_away$home_team_goal,team_data_away$away_team_goal)
+    goals_for <- sum(team_data_home$home_team_goal) + sum(team_data_away$away_team_goal)
+    goals_against <- sum(team_data_home$away_team_goal) + sum(team_data_away$home_team_goal)
+    
+    league_score[league_score$teams == team,] <- c(team, points,goals_for, goals_against, deficit)
+  }
+  
+  # Order teams according to the football rules, points - deficit and so on.
+  attach(league_score)
+  league_score <- league_score[order(p, deficits, g_for, g_against, decreasing = TRUE),]
+  detach(league_score)
+  
+  return(which(league_score$teams == teamName))
+}
+
+# Current form for a specific number of matches

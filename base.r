@@ -24,7 +24,10 @@ main <- function() {
   return(matches)
 }
 
+# Tidying the date
 data <- main()
+data$date <- sub(" 00:00:00", "", data$date)
+data$date <- as.Date(data$date, "%Y-%m-%d")
 
 # locates indices of where NA is present
 locate_NA <- function(x){
@@ -72,36 +75,7 @@ get_season_points <- function(home, away){
 
 # get individual team goal deficit in a season
 get_season_deficit <- function(home_team, away, home, away_team){
-  team_total <- sum(home_team + away_team)
-  opposing_team_total <- sum(away + home)
+  team_total <- sum(home_team) + sum(away_team)
+  opposing_team_total <- sum(away) + sum(home)
   deficit <- team_total - opposing_team_total
-}
-
-#create a league rank function. 
-#League_id is an int 
-#season is characters "2008/2009" 
-#team is characters "Basel"
-team_rank_in_league <- function(seasonID, leagueID, teamName){
-  season_rank = 0
-  
-  # retrieves all data from a specific season
-  season_data <- data[data$season == seasonID & data$league_id == leagueID,]
-  
-  teams = c(season_data$home_team_name[!duplicated((season_data$home_team_name))])
-  num_of_teams = length(teams)
-  
-  league_ranking <- data.frame(rank= integer(num_of_teams), teams, points= integer(num_of_teams), deficit= integer(num_of_teams))
-  
-  for(team in teams){
-    team_data_away <- as.data.frame(season_data[season_data$away_team_name == team,])
-    team_data_home <- as.data.frame(season_data[season_data$home_team_name == team,])
-    
-    points <- get_season_points(team_data_home$w_l_d_home,team_data_away$w_l_d_away)
-    deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
-                                  team_data_away$away_team_goal,team_data_away$home_team_goal)
-    
-    league_ranking[league_ranking$teams == team,] <- c(0, team, points, deficit)
-  }
-  
-  return(season_rank)
 }
