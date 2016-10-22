@@ -18,7 +18,9 @@ main <- function() {
                     team as t_away ON m.away_team_api_id = t_away.team_api_id
                   JOIN 
                     team as t_home ON m.home_team_api_id = t_home.team_api_id
+                  ORDER BY
+                        m.date ASC
                   LIMIT 400")
   
-  print(matches)
+  head(matches$date)
 }

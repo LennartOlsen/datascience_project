@@ -1,3 +1,5 @@
 .DS_Store
 .Rproj.user
 database.sqlite
+.RData
+.RHistory
