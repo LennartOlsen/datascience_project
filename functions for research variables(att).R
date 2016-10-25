@@ -1,3 +1,5 @@
+# load in the base.r file before this file!
+
 #create a league rank function. 
 #League_id is an int 
 #seasonID is characters - E.g. "2008/2009" 
@@ -44,7 +46,7 @@ team_rank_in_league <- function(seasonID, leagueID, teamName){
 team_rank_specific_date <- function(seasonID, search_date, leagueID, teamName){
   # retrieves all data from a specific season and a current time of the season
   season_data <- data[data$season == seasonID & data$league_id == leagueID,]
-  season_data <- season_data[date]
+  season_data <- season_data[season_data$date <= search_date]
   
   teams = c(season_data$home_team_name[!duplicated((season_data$home_team_name))])
   num_of_teams = length(teams)
@@ -77,3 +79,56 @@ team_rank_specific_date <- function(seasonID, search_date, leagueID, teamName){
 }
 
 # Current form for a specific number of matches
+current_form <- function(search_date, leagueID, teamName, num_form_games){
+  league_data <- data[data$league_id == leagueID & data$date <= search_date,]
+  
+  # sort by data, descending
+  attach(league_data)
+  league_data <- league_data[order(date, decreasing = TRUE),]
+  detach(league_data)
+  
+  # find the selected teams for the last matches chosen.
+  league_data <- head(league_data[league_data$away_team_name == teamName | league_data$home_team_name == teamName,], num_form_games)
+  
+  # create vector and find form
+  form <- c()
+  for(i in league_data){
+    if(league_data$home_team_name == teamName){
+      c[i] == league_data$w_l_d_home[i]
+    } else if(league_data$away_team_name == teamName){
+      c[i] == league_data$w_l_d_away[i]
+    }
+  }
+  
+  # return a vector of w/l/d
+  return(form)
+}
+
+# get team deficit for the season
+team_deficit_season <- function(seasonID, leagueID, teamName){
+  # retrieves all data from a specific season and a current time of the season
+  season_data <- data[data$season == seasonID & data$league_id == leagueID,]
+  
+  team_data_away <- as.data.frame(season_data[season_data$away_team_name == team,])
+  team_data_home <- as.data.frame(season_data[season_data$home_team_name == team,])
+  
+  deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
+                                team_data_away$home_team_goal,team_data_away$away_team_goal)
+  
+  return(deficit)
+}
+
+# get team deficit for the season at a current time
+team_deficit_specific_date <- function(seasonID, search_date, leagueID, teamName){
+  # retrieves all data from a specific season and a current time of the season
+  season_data <- data[data$season == seasonID & data$league_id == leagueID,]
+  season_data <- season_data[season_data$date <= search_date]
+  
+  team_data_away <- as.data.frame(season_data[season_data$away_team_name == team,])
+  team_data_home <- as.data.frame(season_data[season_data$home_team_name == team,])
+  
+  deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
+                                team_data_away$home_team_goal,team_data_away$away_team_goal)
+  
+  return(deficit)
+}
