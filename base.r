@@ -1,9 +1,9 @@
 require("RSQLite")
 
-main <- function() {
+main <- function(limit=0) {
   sqlite <- dbDriver("SQLite")
   con <- dbConnect(sqlite, "data/database.sqlite")
-  matches <- dbGetQuery(con, "SELECT 
+  query <- "SELECT 
                        m.league_id,
                        m.date,
                        m.season,
@@ -19,7 +19,11 @@ main <- function() {
                   JOIN 
                     team as t_home ON m.home_team_api_id = t_home.team_api_id
                   ORDER BY
-                        m.date ASC")
+                        m.date ASC"
+  if(limit > 0){
+    query <- paste(query, " LIMIT ", limit, sep=" ");
+  }
+  matches <- dbGetQuery(con, query)
   
   return(matches)
 }
@@ -79,3 +83,7 @@ get_season_deficit <- function(home_team, away, home, away_team){
   opposing_team_total <- sum(away) + sum(home)
   deficit <- team_total - opposing_team_total
 }
+
+## FOR THE ANN IMPLEMANTATION
+annTestData <- data[1:1001,]
+annTestData <- data.frame(annTestData$away_team_goal, annTestData$home_team_goal, annTestData$w_l_d_away)
