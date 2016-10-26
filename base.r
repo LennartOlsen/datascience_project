@@ -7,6 +7,7 @@ main <- function() {
                        m.league_id,
                        m.date,
                        m.season,
+                       m.stage,
                        m.away_team_goal, 
                        m.home_team_goal, 
                        t_away.team_long_name as away_team_name, 
