@@ -1,5 +1,5 @@
 source("base.r")
-source("functions for research variables(att).r")
+source("base2.r")
 
 size <-nrow(dbData)
 tempdbData <- data.frame(league_id = integer(size), dbData$season, dbData$stage,
