@@ -25,9 +25,9 @@ main <- function() {
 }
 
 # Tidying the date
-data <- main()
-data$date <- sub(" 00:00:00", "", data$date)
-data$date <- as.Date(data$date, "%Y-%m-%d")
+dbData <- main()
+dbData$date <- sub(" 00:00:00", "", dbData$date)
+dbData$date <- as.Date(dbData$date, "%Y-%m-%d")
 
 # locates indices of where NA is present
 locate_NA <- function(x){
@@ -36,21 +36,21 @@ locate_NA <- function(x){
 }
 
 # Amount of NA data
-na_data <- locate_NA(data)
+na_data <- locate_NA(dbData)
 
 # new columns with the win, loss, draw combination where win = 0, loss = 1, draw = 2
-data$w_l_d_home <- ifelse(data$home_team_goal==data$away_team_goal, 2,
-                          ifelse(data$home_team_goal < data$away_team_goal, 1,
-                                ifelse(data$home_team_goal > data$away_team_goal, 0,NA  )))
+dbData$w_l_d_home <- ifelse(dbData$home_team_goal==dbData$away_team_goal, 2,
+                          ifelse(dbData$home_team_goal < dbData$away_team_goal, 1,
+                                ifelse(dbData$home_team_goal > dbData$away_team_goal, 0,NA  )))
 
-data$w_l_d_away <- ifelse(data$home_team_goal == data$away_team_goal, 2,
-                          ifelse(data$home_team_goal > data$away_team_goal, 1,
-                                 ifelse(data$home_team_goal < data$away_team_goal, 0,NA  )))
+dbData$w_l_d_away <- ifelse(dbData$home_team_goal == dbData$away_team_goal, 2,
+                          ifelse(dbData$home_team_goal > dbData$away_team_goal, 1,
+                                 ifelse(dbData$home_team_goal < dbData$away_team_goal, 0,NA  )))
 
 # Number of wins, losses and draws
-number_of_wins <- length(data$w_l_d_home[data$w_l_d_home == 0])
-number_of_losses <- length(data$w_l_d_home[data$w_l_d_home == 1])
-number_of_draws <- length(data$w_l_d_home[data$w_l_d_home == 2])
+number_of_wins <- length(dbData$w_l_d_home[dbData$w_l_d_home == 0])
+number_of_losses <- length(dbData$w_l_d_home[dbData$w_l_d_home == 1])
+number_of_draws <- length(dbData$w_l_d_home[dbData$w_l_d_home == 2])
 
 # get individual team points in a season
 get_season_points <- function(home, away){
