@@ -6,6 +6,8 @@ tempdbData <- data.frame(league_id = integer(size), dbData$season, dbData$stage,
                            dbData$home_team_name, form_5= integer(size),
                            rank = integer(size), deficits_surplus = integer(size))
 
+# optimize loop search by defining the number of stages in a league, and break for loop when
+# the number of matches need is found
 for(i in 1:size){
   form_5 <- current_form(dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i], 5)
   
@@ -22,3 +24,6 @@ for(i in 1:size){
                           rank, d_s)
     }
 }
+
+knnData <- data.frame(tempdbData[,5:7])
+# write table to csv file for easier use of data
