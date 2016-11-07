@@ -51,31 +51,3 @@ dbData$w_l_d_away <- ifelse(dbData$home_team_goal == dbData$away_team_goal, 2,
 number_of_wins <- length(dbData$w_l_d_home[dbData$w_l_d_home == 0])
 number_of_losses <- length(dbData$w_l_d_home[dbData$w_l_d_home == 1])
 number_of_draws <- length(dbData$w_l_d_home[dbData$w_l_d_home == 2])
-
-# get individual team points in a season
-get_season_points <- function(home, away){
-  points = 0
-  for(m in home){
-    if(m == 0){
-      points = points + 3
-    } else if(m == 2){
-      points = points + 1
-    }
-  }
-  
-  for(m in away){
-    if(m == 0){
-      points = points + 3
-    } else if(m == 2){
-      points = points + 1
-    }
-  }
-  return(points)
-}
-
-# get individual team goal deficit in a season
-get_season_deficit <- function(home_team, away, home, away_team){
-  team_total <- sum(home_team) + sum(away_team)
-  opposing_team_total <- sum(away) + sum(home)
-  deficit <- team_total - opposing_team_total
-}

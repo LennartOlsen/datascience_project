@@ -1,5 +1,33 @@
 # load in the base.r file before this file!
 
+# get individual team points in a season
+get_season_points <- function(home, away){
+  points = 0
+  for(m in home){
+    if(m == 0){
+      points = points + 3
+    } else if(m == 2){
+      points = points + 1
+    }
+  }
+  
+  for(m in away){
+    if(m == 0){
+      points = points + 3
+    } else if(m == 2){
+      points = points + 1
+    }
+  }
+  return(points)
+}
+
+# get individual team goal deficit in a season
+get_season_deficit <- function(home_team, away, home, away_team){
+  team_total <- sum(home_team) + sum(away_team)
+  opposing_team_total <- sum(away) + sum(home)
+  deficit <- team_total - opposing_team_total
+}
+
 #create a league rank function. 
 #League_id is an int 
 #seasonID is characters - E.g. "2008/2009" 
@@ -81,7 +109,8 @@ team_rank_specific_stage <- function(seasonID, stage, leagueID, teamName){
 
 # Current form for a specific number of matches
 current_form <- function(search_date, leagueID, teamName, num_form_games){
-  league_data <- dbData[dbData$league_id == leagueID & dbData$date <= search_date,]
+  league_data <- dbData[dbData$league_id == leagueID & dbData$date <= search_date & 
+                          (dbData$home_team_name == teamName | dbData$away_team_name == teamName),]
   
   # sort by data, descending
   attach(league_data)
@@ -144,5 +173,31 @@ team_deficit_specific_date <- function(seasonID, search_date, leagueID, teamName
   deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
                                 team_data_away$home_team_goal,team_data_away$away_team_goal)
   
+  return(deficit)
+}
+
+# get team deficit for the last couple of matches
+team_deficit_form <- function(search_date, leagueID, teamName, num_form_games){
+  league_data <- dbData[dbData$league_id == leagueID & dbData$date <= search_date,]
+  
+  # sort by data, descending
+  attach(league_data)
+  league_data <- league_data[order(date, decreasing = TRUE),]
+  detach(league_data)
+  
+  # find the selected teams for the last matches chosen.
+  league_data <- head(league_data[league_data$away_team_name == teamName | league_data$home_team_name == teamName,], num_form_games)
+  
+  if(nrow(league_data) < 1)
+    return(0)
+  
+  # calculates deficit/surplus
+  team_data_away <- as.data.frame(season_data[season_data$away_team_name == teamName,])
+  team_data_home <- as.data.frame(season_data[season_data$home_team_name == teamName,])
+  
+  deficit <- get_season_deficit(team_data_home$home_team_goal,team_data_home$away_team_goal, 
+                                team_data_away$home_team_goal,team_data_away$away_team_goal)
+  
+  # return a sum of goal deficit/surplus
   return(deficit)
 }
