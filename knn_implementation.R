@@ -17,6 +17,8 @@ normalize <- function(x) {
 }
 
 soccer <- read.csv("normalized_data.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+#requires to source the base.r file
+soccer$w_l_d <- dbData$w_l_d_home
 summary(soccer)
 
 soccer %>% ggvis(~rank, ~form_5, fill = ~deficits_surplus) %>% layer_points() ##Look up ggvis, makes awesome scatter plots
@@ -27,8 +29,8 @@ ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.67, 0.33))
 
 soccer.training <- soccer[ind==1, 1:2]                                  #Extract the training set in accordination to the 1/2's from ind
 soccer.test <- soccer[ind==2, 1:2]                                      #Extract the training set in accordination to the 1/2's from ind
-soccer.trainLabels <- soccer[ind==1, 3]                                      #Extract the labels accordingly
-soccer.testLabels <- soccer[ind==2, 3]
+soccer.trainLabels <- soccer[ind==1, 4]                                      #Extract the labels accordingly
+soccer.testLabels <- soccer[ind==2, 4]
 
 
 soccer_pred <- knn(train = soccer.training, test = soccer.test, cl = soccer.trainLabels, k=1)
