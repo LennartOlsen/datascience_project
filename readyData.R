@@ -1,4 +1,4 @@
-source("base.r")
+#source("base.r")
 source("base2.r")
 
 #Data conversion and processing
@@ -12,19 +12,18 @@ start.time <- Sys.time()
 # optimize loop search by defining the number of stages in a league, and break for loop when
 # the number of matches needed is found
 for(i in 1:size){
-  form_5 <- current_form(dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i], 5)
+  start.function.time <- Sys.time()
 
-  if(dbData$stage[i] == 1){
-    d_s <- 0
-    rank <- 1
-    tempdbData[i,] <- c(dbData$league_id[i], dbData$season[i],dbData$stage[i], dbData$home_team_name[i], form_5,
-                      rank, d_s)
-    }else{
+  if(dbData$stage[i] > 5){
+      form_5 <- current_form(dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i], 5)
       rank <- team_rank_specific_stage(dbData$season[i], dbData$stage[i], dbData$league_id[i], dbData$home_team_name[i])
       d_s <- team_deficit_specific_date(dbData$season[i], dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i])
       tempdbData[i,] <- c(dbData$league_id[i], dbData$season[i], dbData$stage[i], dbData$home_team_name[i], form_5,
                           rank, d_s)
-    }
+  }
+  print(i);
+  end.function.time <- Sys.time()
+  print(end.function.time - start.function.time)
 }
 
 end.time <- Sys.time()
