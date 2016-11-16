@@ -16,7 +16,7 @@ for(i in 1:size){
 
   if(dbData$stage[i] > 5){
       form_5 <- current_form(dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i], 5)
-      rank <- team_rank_specific_stage(dbData$season[i], dbData$stage[i], dbData$league_id[i], dbData$home_team_name[i])
+      rank <- team_rank_specific_stage(dbData$season[i], as.numeric(dbData$stage[i]), dbData$league_id[i], dbData$home_team_name[i])
       d_s <- team_deficit_specific_date(dbData$season[i], dbData$date[i]-1, dbData$league_id[i], dbData$home_team_name[i])
       tempdbData[i,] <- c(dbData$league_id[i], dbData$season[i], as.numeric(dbData$stage[i]), dbData$home_team_name[i], form_5,
                           rank, d_s)
