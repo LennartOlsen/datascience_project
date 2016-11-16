@@ -30,9 +30,9 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
-knnData <- data.frame(tempdbData[,5:7])
+tempdbData_trimmed <- tempdbData[dbData$stage > 5,]
 
-#Normalization of data
+#Normalization of data with all stages
 #--------------------------------------------------------------------------------------------
 min_max_normalization <- function(x){
   normalized <- (x - min(x))/(max(x)-min(x))
@@ -50,3 +50,18 @@ norm_data$rank <- min_max_normalization(tempdbData[,6])
 norm_data$deficits_surplus <- min_max_normalization(tempdbData[,7])
 
 #write.csv(norm_data,"normalized_data.csv", quote = FALSE, row.names = FALSE)
+
+#Normalization of data without first 5 stages
+#--------------------------------------------------------------------------------------------
+# makes data numeric
+tempdbData_trimmed$form_5 <- as.numeric(tempdbData_trimmed$form_5)
+tempdbData_trimmed$rank <- as.numeric(tempdbData_trimmed$rank)
+tempdbData_trimmed$deficits_surplus <- as.numeric(tempdbData_trimmed$deficits_surplus)
+
+norm_data_trimmed <- tempdbData_trimmed[,5:7]
+#normalizes the data
+norm_data_trimmed$form_5 <- min_max_normalization(tempdbData_trimmed[,5])
+norm_data_trimmed$rank <- min_max_normalization(tempdbData_trimmed[,6])
+norm_data_trimmed$deficits_surplus <- min_max_normalization(tempdbData_trimmed[,7])
+
+#write.csv(norm_data_trimmed,"normalized_data_no_first_five.csv", quote = FALSE, row.names = FALSE)
