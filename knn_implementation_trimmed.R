@@ -33,11 +33,12 @@ soccer.trainLabels <- soccer[ind==1, 4]                                      #Ex
 soccer.testLabels <- soccer[ind==2, 4]
 
 
-soccer_pred <- knn(train = soccer.training, test = soccer.test, cl = soccer.trainLabels, k=156)
+soccer_pred <- knn(train = soccer.training, test = soccer.test, cl = soccer.trainLabels, k=4)
 soccer_pred
 
 table(soccer.testLabels,soccer_pred)
 
+# Finds best k by comparing accuracy of each k
 # range <- 1:100
 # accs <- rep(0, length(range))
 # 
