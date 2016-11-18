@@ -33,9 +33,6 @@ dbData <- main()
 dbData$date <- sub(" 00:00:00", "", dbData$date)
 dbData$date <- as.Date(dbData$date, "%Y-%m-%d")
 
-#Trimmed dbData without stages 1-5
-trim_dbData <- dbData[dbData$stage > 5,]
-
 # locates indices of where NA is present
 locate_NA <- function(x){
   ind <- which(is.na(x))
@@ -53,6 +50,9 @@ dbData$w_l_d_home <- ifelse(dbData$home_team_goal==dbData$away_team_goal, 2,
 dbData$w_l_d_away <- ifelse(dbData$home_team_goal == dbData$away_team_goal, 2,
                             ifelse(dbData$home_team_goal > dbData$away_team_goal, 1,
                                    ifelse(dbData$home_team_goal < dbData$away_team_goal, 0,NA  )))
+
+#Trimmed dbData without stages 1-5
+trim_dbData <- dbData[dbData$stage > 5,]
 
 # Number of wins, losses and draws
 number_of_wins <- length(data$w_l_d_home[data$w_l_d_home == 0])

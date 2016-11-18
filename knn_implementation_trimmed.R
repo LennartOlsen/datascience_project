@@ -16,7 +16,7 @@ normalize <- function(x) {
   return (num/denom)
 }
 
-soccer <- read.csv("normalized_data_no_first_five.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
 soccer$w_l_d <- trim_dbData$w_l_d_home
 summary(soccer)
@@ -27,16 +27,17 @@ set.seed(1234)  #Keep this seed please
 
 ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.70, 0.3))  
 
-soccer.training <- soccer[ind==1, 1:2]                                  #Extract the training set in accordination to the 1/2's from ind
-soccer.test <- soccer[ind==2, 1:2]                                      #Extract the training set in accordination to the 1/2's from ind
-soccer.trainLabels <- soccer[ind==1, 4]                                      #Extract the labels accordingly
-soccer.testLabels <- soccer[ind==2, 4]
+soccer.training <- soccer[ind==1, 1:6]                                  #Extract the training set in accordination to the 1/2's from ind
+soccer.test <- soccer[ind==2, 1:6]                                      #Extract the training set in accordination to the 1/2's from ind
+soccer.trainLabels <- soccer[ind==1, 7]                                      #Extract the labels accordingly
+soccer.testLabels <- soccer[ind==2, 7]
 
 
-soccer_pred <- knn(train = soccer.training, test = soccer.test, cl = soccer.trainLabels, k=4)
+soccer_pred <- knn(train = soccer.training, test = soccer.test, cl = soccer.trainLabels, k=195)
 soccer_pred
 
-table(soccer.testLabels,soccer_pred)
+#table(soccer.testLabels,soccer_pred)
+CrossTable(soccer.testLabels, soccer_pred, prop.chisq=FALSE)
 
 # Finds best k by comparing accuracy of each k
 # range <- 1:100

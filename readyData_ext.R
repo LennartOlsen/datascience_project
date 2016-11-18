@@ -72,7 +72,7 @@ tempdbData_trimmed_ext$form_5_opp <- as.numeric(tempdbData_trimmed_ext$form_5_op
 tempdbData_trimmed_ext$rank_opp <- as.numeric(tempdbData_trimmed_ext$rank_opp)
 tempdbData_trimmed_ext$deficits_surplus_opp <- as.numeric(tempdbData_trimmed_ext$deficits_surplus_opp)
 
-norm_data_trimmed_ext <- tempdbData_trimmed_ext[,5:7 & 9:11]
+norm_data_trimmed_ext <- tempdbData_trimmed_ext[,c(5,6,7,9,10,11)]
 #normalizes the data
 norm_data_trimmed_ext$form_5 <- min_max_normalization(tempdbData_trimmed_ext[,5])
 norm_data_trimmed_ext$rank <- min_max_normalization(tempdbData_trimmed_ext[,6])
