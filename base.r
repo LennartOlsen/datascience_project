@@ -55,9 +55,9 @@ dbData$w_l_d_away <- ifelse(dbData$home_team_goal == dbData$away_team_goal, 2,
 trim_dbData <- dbData[dbData$stage > 5,]
 
 # Number of wins, losses and draws
-number_of_wins <- length(data$w_l_d_home[data$w_l_d_home == 0])
-number_of_losses <- length(data$w_l_d_home[data$w_l_d_home == 1])
-number_of_draws <- length(data$w_l_d_home[data$w_l_d_home == 2])
+number_of_wins <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 0])
+number_of_losses <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 1])
+number_of_draws <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 2])
 
 ## FOR THE ANN IMPLEMANTATION
 annTestData <- data[1:1001,]

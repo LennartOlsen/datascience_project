@@ -1,4 +1,4 @@
-##
+?##
 # kNN demo implementation
 # STOLEN FROM : https://www.datacamp.com/community/tutorials/machine-learning-in-r#gs.9XuygoE
 ##
@@ -23,9 +23,9 @@ summary(soccer)
 
 ##soccer %>% ggvis(~rank, ~form_5, fill = ~deficits_surplus) %>% layer_points() ##Look up ggvis, makes awesome scatter plots
 
-set.seed(1234)  #Keep this seed please
+set.seed(1)  #Keep this seed please
 
-ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.70, 0.3))  
+ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.7, 0.3))
 
 soccer.training <- soccer[ind==1, 1:6]                                  #Extract the training set in accordination to the 1/2's from ind
 soccer.test <- soccer[ind==2, 1:6]                                      #Extract the training set in accordination to the 1/2's from ind
