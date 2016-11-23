@@ -1,7 +1,7 @@
 
 soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
-# No need for identifying variables a.k.a w_l_d_home
+# No need for identifying variables like w_l_d_home
 #soccer$w_l_d <- trim_dbData$w_l_d_home
 
 #check available variables
@@ -40,7 +40,9 @@ prin_comp$scale
 prin_comp$rotation
 
 # 3. 
-# In order to compute the principal component score vector, we don’t need to multiply the loading with data. Rather, the matrix x has the principal component score vectors in a 8523 × 44 dimension.
+# In order to compute the principal component score vector, 
+# we don’t need to multiply the loading with data. Rather, 
+# the matrix x has the principal component score vectors in a 15544 × 6 dimension.
 
 dim(prin_comp$x)
 
@@ -55,6 +57,8 @@ biplot(prin_comp, scale = 0)
 
 #compute standard deviation of each principal component
 std_dev <- prin_comp$sdev
+prin_comp$sd2 <- prin_comp$sdev
+prin_comp$sd2
 
 #compute variance
 pr_var <- std_dev^2
@@ -85,7 +89,3 @@ plot(prop_varex, xlab = "Principal Component",
 plot(cumsum(prop_varex), xlab = "Principal Component",
        ylab = "Cumulative Proportion of Variance Explained",
        type = "b")
-
-
-# soccer.trainLabels <- soccer[ind==1, 7]                                      #Extract the labels accordingly
-# soccer.testLabels <- soccer[ind==2, 7]

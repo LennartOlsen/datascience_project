@@ -58,7 +58,3 @@ trim_dbData <- dbData[dbData$stage > 5,]
 number_of_wins <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 0])
 number_of_losses <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 1])
 number_of_draws <- length(trim_dbData$w_l_d_home[trim_dbData$w_l_d_home == 2])
-
-## FOR THE ANN IMPLEMANTATION
-annTestData <- data[1:1001,]
-annTestData <- data.frame(annTestData$away_team_goal, annTestData$home_team_goal, annTestData$w_l_d_away)
