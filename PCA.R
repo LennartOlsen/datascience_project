@@ -57,8 +57,6 @@ biplot(prin_comp, scale = 0)
 
 #compute standard deviation of each principal component
 std_dev <- prin_comp$sdev
-prin_comp$sd2 <- prin_comp$sdev
-prin_comp$sd2
 
 #compute variance
 pr_var <- std_dev^2
@@ -89,3 +87,5 @@ plot(prop_varex, xlab = "Principal Component",
 plot(cumsum(prop_varex), xlab = "Principal Component",
        ylab = "Cumulative Proportion of Variance Explained",
        type = "b")
+
+# TODO - Create PCA test data as well as training, then apply it to knn.
