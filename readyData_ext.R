@@ -82,3 +82,12 @@ norm_data_trimmed_ext$rank_opp <- min_max_normalization(tempdbData_trimmed_ext[,
 norm_data_trimmed_ext$deficits_surplus_opp <- min_max_normalization(tempdbData_trimmed_ext[,11])
 
 #write.csv(norm_data_trimmed_ext,"normalized_data_no_first_five_ext.csv", quote = FALSE, row.names = FALSE)
+
+
+# Standardized data
+#----------------------------------------------------------------------------------------------
+# function for z-score standardization
+zscore_standardization <- function(x){
+  standardized = (x - mean)/std
+  return(standardized)
+}
