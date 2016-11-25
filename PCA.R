@@ -1,5 +1,5 @@
 
-soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+soccer <- read.csv("norm_data_no_first_five_ext2.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
 # No need for identifying variables like w_l_d_home
 #soccer$w_l_d <- trim_dbData$w_l_d_home
@@ -10,16 +10,12 @@ colnames(soccer)
 #check variable class for other than numeric type
 str(soccer)
 
-#divide the new data into train and test sets
-set.seed(1)  #Keep this seed please
+pca.train <- soccer[, 1:6]            
 
-ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.7, 0.3))
-
-pca.train <- soccer[ind==1, 1:6]                                  #Extract the training set in accordination to the 1/2's from ind
-pca.test <- soccer[ind==2, 1:6]                                      #Extract the training set in accordination to the 1/2's from ind
 
 #principal component analysis
 prin_comp <- prcomp(pca.train, scale. = T)
+prin_comp_test <- prcomp(pca.test, scale. = T)
 names(prin_comp)
 
 # 1. 
@@ -87,5 +83,30 @@ plot(prop_varex, xlab = "Principal Component",
 plot(cumsum(prop_varex), xlab = "Principal Component",
        ylab = "Cumulative Proportion of Variance Explained",
        type = "b")
+# with for principal components 90.6% of the end result can be supplied
 
-# TODO - Create PCA test data as well as training, then apply it to knn.
+#------------------------------------------------------------------------------------------------
+#convert files for knn analysis
+pca <- as.data.frame(prin_comp$x)
+
+#requires to source the base.r file
+pca$w_l_d <- trim_dbData$w_l_d_home
+
+set.seed(1)  #Keep this seed please
+
+ind <- sample(2, nrow(pca), replace=TRUE, prob=c(0.7,0.3))
+
+# test and training for knn
+pca.training <- pca[ind==1, 1:6]                                  #Extract the training set in accordination to the 1/2's from ind
+pca.test <- pca[ind==2, 1:6]                                      #Extract the training set in accordination to the 1/2's from ind
+pca.trainLabels <- pca[ind==1, 7]                                      #Extract the labels accordingly
+pca.testLabels <- pca[ind==2, 7]
+
+#Best k for knn 195
+pca_pred <- knn(pca.training, pca.test, cl = pca.trainLabels, k=274)
+pca_pred
+
+#table(soccer.testLabels,soccer_pred)
+CrossTable(pca.testLabels, pca_pred, prop.chisq=FALSE)
+
+#result of 51,09 % accuracy

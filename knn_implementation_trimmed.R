@@ -10,7 +10,10 @@
 library(class)
 library(gmodels)
 
-soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+#Other method of normalization
+soccer <- read.csv("norm_data_no_first_five_ext2.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+
+#soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
 soccer$w_l_d <- trim_dbData$w_l_d_home
 summary(soccer)
@@ -27,12 +30,14 @@ soccer.test <- soccer[ind==2, 1:6]                                      #Extract
 soccer.trainLabels <- soccer[ind==1, 7]                                      #Extract the labels accordingly
 soccer.testLabels <- soccer[ind==2, 7]
 
-#Best k for knn 195
-soccer_pred <- knn(soccer.training, soccer.test, cl = soccer.trainLabels, k=195)
+#Best k for knn 274
+soccer_pred <- knn(soccer.training, soccer.test, cl = soccer.trainLabels, k=274)
 soccer_pred
 
 #table(soccer.testLabels,soccer_pred)
 CrossTable(soccer.testLabels, soccer_pred, prop.chisq=FALSE)
+
+#Result of 51.27 % accuracy
 
 # Finds best k by comparing accuracy of each k
 # range <- 1:100

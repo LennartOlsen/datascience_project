@@ -51,14 +51,14 @@ tempdbData_ext$form_5_opp <- as.numeric(tempdbData_ext$form_5_opp)
 tempdbData_ext$rank_opp <- as.numeric(tempdbData_ext$rank_opp)
 tempdbData_ext$deficits_surplus_opp <- as.numeric(tempdbData_ext$deficits_surplus_opp)
 
-norm_data_ext <- tempdbData_ext[,5:7 & 9:11]
-#normalizes the data
-norm_data_ext$form_5 <- min_max_normalization(tempdbData_ext[,5])
-norm_data_ext$rank <- min_max_normalization(tempdbData_ext[,6])
-norm_data_ext$deficits_surplus <- min_max_normalization(tempdbData_ext[,7])
-norm_data_ext$form_5_opp <- min_max_normalization(tempdbData_ext[,9])
-norm_data_ext$rank_opp <- min_max_normalization(tempdbData_ext[,10])
-norm_data_ext$deficits_surplus_opp <- min_max_normalization(tempdbData_ext[,11])
+# norm_data_ext <- tempdbData_ext[,5:7 & 9:11]
+# #normalizes the data
+# norm_data_ext$form_5 <- min_max_normalization(tempdbData_ext[,5])
+# norm_data_ext$rank <- min_max_normalization(tempdbData_ext[,6])
+# norm_data_ext$deficits_surplus <- min_max_normalization(tempdbData_ext[,7])
+# norm_data_ext$form_5_opp <- min_max_normalization(tempdbData_ext[,9])
+# norm_data_ext$rank_opp <- min_max_normalization(tempdbData_ext[,10])
+# norm_data_ext$deficits_surplus_opp <- min_max_normalization(tempdbData_ext[,11])
 
 #write.csv(norm_data_ext,"normalized_data_ext.csv", quote = FALSE, row.names = FALSE)
 
@@ -72,17 +72,19 @@ tempdbData_trimmed_ext$form_5_opp <- as.numeric(tempdbData_trimmed_ext$form_5_op
 tempdbData_trimmed_ext$rank_opp <- as.numeric(tempdbData_trimmed_ext$rank_opp)
 tempdbData_trimmed_ext$deficits_surplus_opp <- as.numeric(tempdbData_trimmed_ext$deficits_surplus_opp)
 
-norm_data_trimmed_ext <- tempdbData_trimmed_ext[,c(5,6,7,9,10,11)]
+# norm_data_trimmed_ext <- tempdbData_trimmed_ext[,c(5,6,7,9,10,11)]
 #normalizes the data
-norm_data_trimmed_ext$form_5 <- min_max_normalization(tempdbData_trimmed_ext[,5])
-norm_data_trimmed_ext$rank <- min_max_normalization(tempdbData_trimmed_ext[,6])
-norm_data_trimmed_ext$deficits_surplus <- min_max_normalization(tempdbData_trimmed_ext[,7])
-norm_data_trimmed_ext$form_5_opp <- min_max_normalization(tempdbData_trimmed_ext[,9])
-norm_data_trimmed_ext$rank_opp <- min_max_normalization(tempdbData_trimmed_ext[,10])
-norm_data_trimmed_ext$deficits_surplus_opp <- min_max_normalization(tempdbData_trimmed_ext[,11])
+# norm_data_trimmed_ext$form_5 <- min_max_normalization(tempdbData_trimmed_ext[,5])
+# norm_data_trimmed_ext$rank <- min_max_normalization(tempdbData_trimmed_ext[,6])
+# norm_data_trimmed_ext$deficits_surplus <- min_max_normalization(tempdbData_trimmed_ext[,7])
+# norm_data_trimmed_ext$form_5_opp <- min_max_normalization(tempdbData_trimmed_ext[,9])
+# norm_data_trimmed_ext$rank_opp <- min_max_normalization(tempdbData_trimmed_ext[,10])
+# norm_data_trimmed_ext$deficits_surplus_opp <- min_max_normalization(tempdbData_trimmed_ext[,11])
 
 #write.csv(norm_data_trimmed_ext,"normalized_data_no_first_five_ext.csv", quote = FALSE, row.names = FALSE)
 
+#other way to normalize, normalize the entire dataset in one instead of each column
+norm_data_trimmed_ext2 <- min_max_normalization(tempdbData_trimmed_ext)
 
 # Standardized data
 #----------------------------------------------------------------------------------------------
