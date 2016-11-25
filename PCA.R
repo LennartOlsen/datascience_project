@@ -88,6 +88,8 @@ plot(cumsum(prop_varex), xlab = "Principal Component",
 #------------------------------------------------------------------------------------------------
 #convert files for knn analysis
 pca <- as.data.frame(prin_comp$x)
+pca$PC5 <- NULL
+pca$PC6 <- NULL
 
 #requires to source the base.r file
 pca$w_l_d <- trim_dbData$w_l_d_home
@@ -96,17 +98,17 @@ set.seed(1)  #Keep this seed please
 
 ind <- sample(2, nrow(pca), replace=TRUE, prob=c(0.7,0.3))
 
-# test and training for knn
-pca.training <- pca[ind==1, 1:6]                                  #Extract the training set in accordination to the 1/2's from ind
-pca.test <- pca[ind==2, 1:6]                                      #Extract the training set in accordination to the 1/2's from ind
-pca.trainLabels <- pca[ind==1, 7]                                      #Extract the labels accordingly
-pca.testLabels <- pca[ind==2, 7]
+# test and training for knn selection of the 4 principal components
+pca.training <- pca[ind==1, 1:4]                                  #Extract the training set in accordination to the 1/2's from ind
+pca.test <- pca[ind==2, 1:4]                                      #Extract the training set in accordination to the 1/2's from ind
+pca.trainLabels <- pca[ind==1, 5]                                      #Extract the labels accordingly
+pca.testLabels <- pca[ind==2, 5]
 
 #Best k for knn 195
-pca_pred <- knn(pca.training, pca.test, cl = pca.trainLabels, k=274)
+pca_pred <- knn(pca.training, pca.test, cl = pca.trainLabels, k=287)
 pca_pred
 
 #table(soccer.testLabels,soccer_pred)
 CrossTable(pca.testLabels, pca_pred, prop.chisq=FALSE)
 
-#result of 51,09 % accuracy
+#result of 51,02 % accuracy
