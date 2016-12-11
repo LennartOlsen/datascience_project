@@ -10,3 +10,14 @@ for(i in 1:nrow(soccer)){
     soccer$w_l_d[i] = "draw"
 }
 soccer %>% ggvis(~deficits_surplus, ~deficits_surplus_opp, fill = ~w_l_d,  opacity := 0.2) %>% layer_points() ##Look up ggvis, makes awesome scatter plots
+
+
+#Best k for knn 274
+pro_league <- as.data.frame(c())
+pro_league$form_5 <- c(0.2666666667, 0.6666666667)
+pro_league$rank <- c(0.3959731544, 0.2631578947)
+pro_league$deficit <- c(0.3959731544, 0.3825503356)
+pro_league$form_5_opp <- c(0.3333333333, 0.7333333333)
+pro_league$rank_opp <- c(0.6315789474, 0.1052631579)
+pro_league$deficit_opp <- c(0.3624161074, 0.4362416107)
+soccer_pred <- knn(soccer.training, pro_league, cl = soccer.trainLabels, k=162)
