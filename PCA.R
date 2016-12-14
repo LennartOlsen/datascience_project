@@ -1,5 +1,5 @@
 
-soccer <- read.csv("norm_data_no_first_five_ext2.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
 # No need for identifying variables like w_l_d_home
 #soccer$w_l_d <- trim_dbData$w_l_d_home
@@ -43,6 +43,8 @@ prin_comp$rotation
 dim(prin_comp$x)
 
 #Let’s plot the resultant principal components.
+principal <- as.data.frame(prin_comp$x)
+plot(principal$PC1, principal$PC2, xlab = "PC1", ylab = "PC2")
 
 biplot(prin_comp, scale = 0)
 
@@ -93,7 +95,7 @@ pca$PC6 <- NULL
 
 #requires to source the base.r file
 pca$w_l_d <- trim_dbData$w_l_d_home
-
+start.time <- Sys.time()
 set.seed(1)  #Keep this seed please
 
 ind <- sample(2, nrow(pca), replace=TRUE, prob=c(0.7,0.3))
@@ -105,10 +107,38 @@ pca.trainLabels <- pca[ind==1, 5]                                      #Extract 
 pca.testLabels <- pca[ind==2, 5]
 
 #Best k for knn 195
-pca_pred <- knn(pca.training, pca.test, cl = pca.trainLabels, k=287)
+pca_pred <- knn(pca.training, pca.test, cl = pca.trainLabels, k=246)
 pca_pred
 
 #table(soccer.testLabels,soccer_pred)
 CrossTable(pca.testLabels, pca_pred, prop.chisq=FALSE)
-
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 #result of 51,02 % accuracy
+#Finds best k by comparing accuracy of each k
+range <- 1:300
+accs <- rep(0, length(range))
+start.time <- Sys.time()
+for (k in range) {
+  
+  #make predictions using knn: pred
+  pred <- knn(pca.training, pca.test, pca.trainLabels, k = k)
+  
+  #construct the confusion matrix: conf
+  conf <- table(pca.testLabels, pred)
+  
+  #calculate the accuracy and store it in accs[k]
+  accs[k] <- sum(diag(conf)) / sum(conf)
+  print(k)
+}
+time.taken <- end.time - start.time
+time.taken
+# Plot the accuracies. Title of x-axis is "k".
+plot(range, accs, xlab = "k")
+
+# Calculate the best k
+which.max(accs)
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken

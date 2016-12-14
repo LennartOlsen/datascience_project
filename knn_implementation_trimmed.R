@@ -10,16 +10,14 @@
 library(class)
 library(gmodels)
 
-#Other method of normalization
-soccer <- read.csv("norm_data_no_first_five_ext2.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
+soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 
-#soccer <- read.csv("normalized_data_no_first_five_ext.csv", header = TRUE)  ##Reads the CSV file and specifies that no header is present
 #requires to source the base.r file
 soccer$w_l_d <- trim_dbData$w_l_d_home
 summary(soccer)
 
 ##soccer %>% ggvis(~rank, ~form_5, fill = ~deficits_surplus) %>% layer_points() ##Look up ggvis, makes awesome scatter plots
-
+start.time <- Sys.time()
 set.seed(1)  #Keep this seed please
 
 ind <- sample(2, nrow(soccer), replace=TRUE, prob=c(0.7,0.3))
@@ -31,33 +29,38 @@ soccer.trainLabels <- soccer[ind==1, 7]                                      #Ex
 soccer.testLabels <- soccer[ind==2, 7]
 
 #Best k for knn 274
-soccer_pred <- knn(soccer.training, soccer.test, cl = soccer.trainLabels, k=274)
+soccer_pred <- knn(soccer.training, soccer.test, cl = soccer.trainLabels, k=246)
 soccer_pred
 
 #table(soccer.testLabels,soccer_pred)
 CrossTable(soccer.testLabels, soccer_pred, prop.chisq=FALSE)
-
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 #Result of 51.27 % accuracy
 
-# Finds best k by comparing accuracy of each k
-# range <- 1:100
-# accs <- rep(0, length(range))
-# 
-# for (k in range) {
-#   
-#   #make predictions using knn: pred
-#   pred <- knn(soccer.training, soccer.test, soccer.trainLabels, k = k)
-#   
-#   #construct the confusion matrix: conf
-#   conf <- table(soccer.testLabels, pred)
-#   
-#   #calculate the accuracy and store it in accs[k]
-#   accs[k] <- sum(diag(conf)) / sum(conf)
-#   print(k)
-# }
-# 
-# # Plot the accuracies. Title of x-axis is "k".
-# plot(range, accs, xlab = "k")
-# 
-# # Calculate the best k
-# which.max(accs)
+#Finds best k by comparing accuracy of each k
+range <- 1:300
+accs <- rep(0, length(range))
+start.time <- Sys.time()
+for (k in range) {
+
+  #make predictions using knn: pred
+  pred <- knn(soccer.training, soccer.test, soccer.trainLabels, k = k)
+
+  #construct the confusion matrix: conf
+  conf <- table(soccer.testLabels, pred)
+
+  #calculate the accuracy and store it in accs[k]
+  accs[k] <- sum(diag(conf)) / sum(conf)
+  print(k)
+}
+
+# Plot the accuracies. Title of x-axis is "k".
+plot(range, accs, xlab = "k")
+
+# Calculate the best k
+which.max(accs)
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken

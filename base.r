@@ -11,7 +11,8 @@ main <- function(limit=0) {
                        m.away_team_goal, 
                        m.home_team_goal, 
                        t_away.team_long_name as away_team_name, 
-                       t_home.team_long_name as home_team_name
+                       t_home.team_long_name as home_team_name,
+                       m.b365h
                   FROM 
                     match as m
                   JOIN 
