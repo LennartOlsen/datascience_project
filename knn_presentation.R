@@ -9,7 +9,15 @@ for(i in 1:nrow(soccer)){
   if(soccer$w_l_d[i] == 2)
     soccer$w_l_d[i] = "draw"
 }
-soccer %>% ggvis(~deficits_surplus, ~deficits_surplus_opp, fill = ~w_l_d,  opacity := 0.2) %>% layer_points() ##Look up ggvis, makes awesome scatter plots
+soccer %>% 
+  ggvis(~deficits_surplus, ~deficits_surplus_opp, fill = ~w_l_d,  opacity := 0.2) %>% 
+  layer_points() %>%
+  add_axis("x", title = "Goal Difference", title_offset = 50, 
+           properties = axis_props(title = list(fontSize = 18), labels = list(fontSize=14))) %>%
+  add_axis("y", title = "Goal Difference Opponent", title_offset = 50,  
+           properties = axis_props(title = list(fontSize = 18), labels = list(fontSize=14))) %>%
+  add_legend("fill", title = "Win Loose Draw",  
+             properties = legend_props(title = list(fontSize=18), labels = list(fontSize=14)))
 
 
 #Best k for knn 274
